@@ -8,33 +8,79 @@ import axios from 'axios'
 class AsyncLoad {
   constructor () {
     this.BchWallet = false
+    this.AvaxWallet = false
   }
 
   // Load the minimal-slp-wallet which comes in as a <script> file and is
   // attached to the global 'window' object.
-  async loadWalletLib () {
+  async loadBchWalletLib () {
     do {
       if (typeof window !== 'undefined' && window.SlpWallet) {
         this.BchWallet = window.SlpWallet
 
         return this.BchWallet
       } else {
-        console.log('Waiting for wallet library to load...')
+        console.log('Waiting for BCH wallet library to load...')
       }
 
       await sleep(1000)
     } while (!this.BchWallet)
   }
 
+  // Load the minimal-avax-wallet which comes in as a <script> file and is
+  // attached to the global 'window' object.
+  async loadAvaxWalletLib () {
+    do {
+      if (typeof window !== 'undefined' && window.SlpWallet) {
+        this.AvaxWallet = window.AvaxWallet
+
+        return this.AvaxWallet
+      } else {
+        console.log('Waiting for AVAX wallet library to load...')
+      }
+
+      await sleep(1000)
+    } while (!this.AvaxWallet)
+  }
+
+  // Get the BCH and AVAX Mnemonics from the DEX server
+  async getMnemonics () {
+    // TODO: Add the axios.get() method to get the mnemonics from the server.
+    // For now, simulating the mnemonics.
+
+    const avax = 'rabbit window lyrics panel joke pudding approve promote arrest ten arctic ring midnight cancel true focus pet million lab duty pyramid sad soul verify'
+    const bch = 'tackle mail mushroom relax shed vehicle start obvious worry disorder chair vocal'
+
+    return { bch, avax }
+  }
+
   // Initialize the BCH wallet
-  async initWallet (restURL) {
+  async initBchWallet (mnemonic, restURL) {
     const options = {
       interface: 'consumer-api',
       restURL,
       noUpdate: true
     }
 
-    const wallet = new this.BchWallet(null, options)
+    const wallet = new this.BchWallet(mnemonic, options)
+
+    await wallet.walletInfoPromise
+    // console.log(`mnemonic: ${wallet.walletInfo.mnemonic}`)
+
+    this.wallet = wallet
+
+    return wallet
+  }
+
+  // Initialize the BCH wallet
+  async initAvaxWallet (mnemonic) {
+    const options = {
+      // interface: 'consumer-api',
+      // restURL,
+      noUpdate: true
+    }
+
+    const wallet = new this.AvaxWallet(mnemonic, options)
 
     await wallet.walletInfoPromise
     // console.log(`mnemonic: ${wallet.walletInfo.mnemonic}`)

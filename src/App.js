@@ -35,12 +35,15 @@ class App extends React.Component {
 
     this.state = {
       walletInitialized: false,
-      wallet: false,
+      bchWallet: false,
+      avaxWallet: false,
       modalBody: this.modalBody,
       hideSpinner: false,
       menuState: 0,
       queryParamExists: false,
-      serverUrl
+      serverUrl,
+      bchMnemonic: '',
+      avaxMnemonic: ''
     }
 
     this.cnt = 0
@@ -52,20 +55,39 @@ class App extends React.Component {
     try {
       this.addToModal('Loading minimal-slp-wallet')
 
-      await this.asyncLoad.loadWalletLib()
+      await this.asyncLoad.loadBchWalletLib()
 
-      this.addToModal('Initializing wallet')
-      // console.log(`Initializing wallet with back end server ${serverUrl}`)
-      // console.log(`queryParamExists: ${queryParamExists}`)
+      this.addToModal('Loading minimal-avax-wallet')
 
-      const wallet = await this.asyncLoad.initWallet(serverUrl)
+      await this.asyncLoad.loadAvaxWalletLib()
+
+      this.addToModal('Getting Wallet Mnemonic from Server')
+
+      const mnemonics = await this.asyncLoad.getMnemonics()
+      console.log('mnemonics: ', mnemonics)
+
+      this.addToModal('Initializing BCH wallet')
+
+      const bchWallet = await this.asyncLoad.initBchWallet(mnemonics.bch, serverUrl)
+
+      this.addToModal('Initializing AVAX wallet')
+
+      const avaxWallet = await this.asyncLoad.initAvaxWallet(mnemonics.avax)
 
       this.setState({
-        wallet,
+        bchWallet,
+        avaxWallet,
         walletInitialized: true,
         serverUrl,
-        queryParamExists
+        queryParamExists,
+        bchMnemonic: mnemonics.bch,
+        avaxMnemonic: mnemonics.avax
       })
+
+      // Kick off the wallet balance retrieval, but do not wait for them to
+      // complete (no await).
+      avaxWallet.utxos.initUtxoStore(avaxWallet.walletInfo.address)
+      bchWallet.utxos.initUtxoStore(bchWallet.walletInfo.address)
     } catch (err) {
       this.modalBody = [
         `Error: ${err.message}`,
@@ -89,7 +111,7 @@ class App extends React.Component {
         <GetRestUrl />
         <LoadScripts />
         <NavMenu menuHandler={this.onMenuClick} />
-        {this.state.walletInitialized ? <InitializedView wallet={this.state.wallet} menuState={this.state.menuState} /> : <UninitializedView modalBody={this.state.modalBody} hideSpinner={this.state.hideSpinner} />}
+        {this.state.walletInitialized ? <InitializedView bchWallet={this.state.bchWallet} avaxWalet={this.state.avaxWallet} menuState={this.state.menuState} /> : <UninitializedView modalBody={this.state.modalBody} hideSpinner={this.state.hideSpinner} />}
         <ServerSelect displayUrl={this.state.serverUrl} queryParamExists={queryParamExists} />
         <Footer />
       </>
@@ -136,7 +158,7 @@ function InitializedView (props) {
   return (
     <>
       <br />
-      <AppBody menuState={_this.state.menuState} wallet={props.wallet} />
+      <AppBody menuState={_this.state.menuState} bchWallet={_this.state.bchWallet} avaxWallet={_this.state.avaxWallet} />
     </>
   )
 }
@@ -146,7 +168,7 @@ function GetRestUrl (props) {
   const [restURL] = useQueryParam('restURL', StringParam)
   // console.log('restURL: ', restURL)
 
-  if(restURL) {
+  if (restURL) {
     serverUrl = restURL
     queryParamExists = true
   }
