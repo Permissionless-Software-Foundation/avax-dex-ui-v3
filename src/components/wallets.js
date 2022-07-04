@@ -32,7 +32,7 @@ class Wallets extends React.Component {
       console.log('avaxBalances: ', avaxBalances)
 
       // Filter out just the AVAX
-      let avaxBalance = avaxBalances.filter(x => x.symbol === "AVAX")
+      let avaxBalance = avaxBalances.filter(x => x.symbol === 'AVAX')
       avaxBalance = avaxBalance[0].amount / Math.pow(10, avaxBalance[0].denomination)
       console.log('avaxBalance: ', avaxBalance)
 
@@ -89,7 +89,7 @@ class Wallets extends React.Component {
     )
   }
 
-  async handleRefreshBch() {
+  async handleRefreshBch () {
     try {
       await _this.state.bchWallet.walletInfoPromise
 
@@ -104,7 +104,7 @@ class Wallets extends React.Component {
     }
   }
 
-  async handleRefreshAvax() {
+  async handleRefreshAvax () {
     try {
       await _this.state.avaxWallet.walletInfoPromise
 
@@ -112,7 +112,7 @@ class Wallets extends React.Component {
       console.log('avaxBalances: ', avaxBalances)
 
       // Filter out just the AVAX
-      let avaxBalance = avaxBalances.filter(x => x.symbol === "AVAX")
+      let avaxBalance = avaxBalances.filter(x => x.symbol === 'AVAX')
       avaxBalance = avaxBalance[0].amount / Math.pow(10, avaxBalance[0].denomination)
       console.log('avaxBalance: ', avaxBalance)
 

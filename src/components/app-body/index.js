@@ -11,7 +11,8 @@ import React from 'react'
 
 // Local libraries
 import GetBalance from '../balance'
-import Placeholder2 from '../placeholder2'
+import AvaxTokens from '../avax-tokens'
+import BchTokens from '../bch-tokens'
 import Wallets from '../wallets'
 
 let _this
@@ -47,8 +48,10 @@ class AppBody extends React.Component {
       case 0:
         return (<GetBalance wallet={_this.state.bchWallet} />)
       case 1:
-        return (<Placeholder2 />)
+        return (<AvaxTokens avaxWallet={_this.state.avaxWallet} />)
       case 2:
+        return (<BchTokens bchWallet={_this.state.bchWallet} />)
+      case 3:
         return (<Wallets bchWallet={_this.state.bchWallet} avaxWallet={_this.state.avaxWallet} />)
       default:
         return (<GetBalance wallet={_this.state.wallet} />)
