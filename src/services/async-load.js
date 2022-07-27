@@ -74,20 +74,25 @@ class AsyncLoad {
 
   // Initialize the BCH wallet
   async initAvaxWallet (mnemonic) {
-    const options = {
-      // interface: 'consumer-api',
-      // restURL,
-      noUpdate: true
+    try {
+      const options = {
+        // interface: 'consumer-api',
+        // restURL,
+        noUpdate: true
+      }
+
+      const wallet = new this.AvaxWallet(mnemonic, options)
+
+      await wallet.walletInfoPromise
+      // console.log(`mnemonic: ${wallet.walletInfo.mnemonic}`)
+
+      this.wallet = wallet
+
+      return wallet
+    } catch (err) {
+      console.log('Error while trying to load AVAX wallet: ', err)
+      throw new Error('Error while trying to load AVAX wallet. Please refresh the page and try again.')
     }
-
-    const wallet = new this.AvaxWallet(mnemonic, options)
-
-    await wallet.walletInfoPromise
-    // console.log(`mnemonic: ${wallet.walletInfo.mnemonic}`)
-
-    this.wallet = wallet
-
-    return wallet
   }
 
   // Get token data for a given Token ID

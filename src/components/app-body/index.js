@@ -10,7 +10,8 @@
 import React from 'react'
 
 // Local libraries
-import GetBalance from '../balance'
+// import GetBalance from '../balance'
+import Offers from '../offers'
 import AvaxTokens from '../avax-tokens'
 import BchTokens from '../bch-tokens'
 import Wallets from '../wallets'
@@ -46,7 +47,7 @@ class AppBody extends React.Component {
 
     switch (menuState) {
       case 0:
-        return (<GetBalance wallet={_this.state.bchWallet} />)
+        return (<Offers wallet={_this.state.bchWallet} />)
       case 1:
         return (<AvaxTokens avaxWallet={_this.state.avaxWallet} />)
       case 2:
@@ -54,7 +55,7 @@ class AppBody extends React.Component {
       case 3:
         return (<Wallets bchWallet={_this.state.bchWallet} avaxWallet={_this.state.avaxWallet} />)
       default:
-        return (<GetBalance wallet={_this.state.wallet} />)
+        return (<Offers wallet={_this.state.wallet} />)
     }
   }
 }
