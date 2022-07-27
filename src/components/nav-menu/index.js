@@ -33,9 +33,10 @@ class NavMenu extends React.Component {
           <Navbar.Toggle aria-controls='responsive-navbar-nav' />
           <Navbar.Collapse id='responsive-navbar-nav'>
             <Nav className='mr-auto'>
-              <Nav.Link href='#' onClick={() => this.handleClickEvent(0)}>Check Balance</Nav.Link>
-              <Nav.Link href='#' onClick={() => this.handleClickEvent(1)}>Placeholder2</Nav.Link>
-              <Nav.Link href='#' onClick={() => this.handleClickEvent(2)}>Placeholder 3</Nav.Link>
+              <Nav.Link href='#' onClick={() => this.handleClickEvent(0)}>Offers</Nav.Link>
+              <Nav.Link href='#' onClick={() => this.handleClickEvent(1)}>AVAX Tokens</Nav.Link>
+              <Nav.Link href='#' onClick={() => this.handleClickEvent(2)}>BCH Tokens</Nav.Link>
+              <Nav.Link href='#' onClick={() => this.handleClickEvent(3)}>Wallets</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
